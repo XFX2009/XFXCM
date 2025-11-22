@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XFX & CM 的爱情故事</title>
-    <!-- 引入外部资源 -->
+    <title>XFX & CM 的恋爱小天地</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    
-    <!-- 自定义配置 -->
     <script>
         tailwind.config = {
             theme: {
@@ -32,7 +29,6 @@
             }
         }
     </script>
-    
     <style type="text/tailwindcss">
         @layer utilities {
             .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
@@ -42,66 +38,376 @@
             .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
             .animate-float { animation: float 6s ease-in-out infinite; }
             .animate-float-slow { animation: float 8s ease-in-out infinite; }
-            .animate-wave-horizontal { animation: waveHorizontal 30s linear infinite; } /* 改为水平动画 */
             .content-auto { content-visibility: auto; }
         }
-
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
-        /* 定义水平波浪动画 */
-        @keyframes waveHorizontal {
-            0% { background-position-x: 0; }
-            100% { background-position-x: 2000px; } /* 增加滚动距离 */
-        }
     </style>
-    
-    <!-- 烟花特效样式 -->
     <style>
+        /* 烟花效果 */
         #fireworks {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; display: none;
         }
         .firework {
-            position: absolute; width: 10px; height: 10px; border-radius: 50%; animation: explode 1s ease-out forwards;
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
         }
         @keyframes explode {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(20); opacity: 0; }
+            0% { transform: scale(0) translate(0, 0); opacity: 1; }
+            10% { transform: scale(1) translate(var(--tx), var(--ty)); opacity: 1; }
+            100% { transform: scale(1.5) translate(var(--tx), var(--ty)); opacity: 0; }
         }
 
-        /* 星空背景 - 使用本地图片 */
+        /* 背景波浪动效 */
         .wave-bg {
-            /* 使用本地背景图片 */
-            background-image: url('Back.jpg');
+            background-image: url('Back.jpg'); /* 背景图路径（同文件夹） */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* 添加轻微的动态效果 */
             transform: scale(1.05);
             animation: slowZoom 30s ease-in-out infinite alternate;
         }
-        
-        /* 缓慢缩放动画，增加背景的动态感 */
         @keyframes slowZoom {
             0% { transform: scale(1.05) translateX(0); }
             100% { transform: scale(1.1) translateX(-1%); }
         }
-        
-        /* 滚动动画 */
+
+        /* 渐入动画 */
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .fade-in-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .fade-in-left.is-visible { opacity: 1; transform: translateX(0); }
         .tilt-in { opacity: 0; transform: translateY(30px) rotate(5deg); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .tilt-in.is-visible { opacity: 1; transform: translateY(0) rotate(0); }
+
+        /* 记忆卡片翻转 */
+        .memory-card {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+        .memory-card:hover { transform: rotateY(180deg); }
+        .memory-front, .memory-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .memory-front { background-color: #fff; }
+        .memory-back {
+            background: linear-gradient(135deg, #ff3e6c, #8a2be2);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            transform: rotateY(180deg);
+        }
+
+        /* 爱心粒子 */
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: heartFloat 1.5s ease-out forwards;
+        }
+        @keyframes heartFloat {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -150%) scale(0.8) rotate(360deg); opacity: 0; }
+        }
+
+        /* 音乐播放器 */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9998;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .play-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff3e6c, #8a2be2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 62, 108, 0.3);
+        }
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 62, 108, 0.4);
+        }
+        .progress-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .progress-bar {
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff3e6c, #8a2be2);
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .volume-icon {
+            color: #666;
+            font-size: 18px;
+        }
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+        .volume-level {
+            position: absolute;
+            height: 100%;
+            width: 70%;
+            background: linear-gradient(90deg, #ff3e6c, #8a2be2);
+            border-radius: 2px;
+        }
+
+        /* 歌词容器 */
+        .lyrics-container {
+            position: fixed;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            z-index: 9997;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lyrics {
+            font-size: 16px;
+            line-height: 1.5;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .lyrics-fade {
+            opacity: 0.3;
+            transform: translateY(10px);
+        }
+
+        /* 倒计时部分 */
+        .countdown-section {
+            padding: 60px 20px 120px;
+            background: linear-gradient(135deg, #fdf2f8 0%, #f5f5f5 100%);
+            text-align: center;
+        }
+        .countdown-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+        .countdown-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff3e6c, #8a2be2);
+            border-radius: 3px;
+        }
+        .countdown-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .countdown-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            padding: 20px 15px;
+            width: 120px;
+            transition: all 0.3s ease;
+        }
+        .countdown-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        .countdown-card.past {
+            background: #f8f8f8;
+            border: 1px solid #eee;
+        }
+        .countdown-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .countdown-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff3e6c;
+            margin-bottom: 5px;
+        }
+        .countdown-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .countdown-card {
+                width: 100px;
+                padding: 15px 10px;
+            }
+            .countdown-value {
+                font-size: 24px;
+            }
+            .player-controls {
+                gap: 10px;
+            }
+            .play-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            .volume-slider {
+                width: 60px;
+            }
+        }
+        @media (max-width: 480px) {
+            .countdown-container {
+                gap: 15px;
+            }
+            .countdown-card {
+                width: 80px;
+                padding: 12px 8px;
+            }
+            .countdown-value {
+                font-size: 20px;
+            }
+            .countdown-label {
+                font-size: 12px;
+            }
+            .lyrics {
+                font-size: 14px;
+            }
+            .music-player {
+                padding: 12px 15px;
+            }
+            .time-display {
+                font-size: 10px;
+            }
+            .countdown-section {
+                padding-bottom: 100px;
+            }
+        }
     </style>
 </head>
 <body class="font-romantic text-gray-800 overflow-x-hidden bg-pink-50">
-
-    <!-- 烟花特效容器 -->
+    <!-- 烟花容器 -->
     <div id="fireworks"></div>
+    <!-- 烟花音效 -->
+    <audio id="firework-sound" src="https://assets.codepen.io/2104104/8-bit-firework.mp3" preload="auto"></audio>
+    <!-- 背景音乐 -->
+    <audio id="background-music" loop preload="auto">
+        <source src="MUSIC.mp3" type="audio/mpeg"> <!-- 音乐路径（同文件夹） -->
+        您的浏览器不支持音频播放
+      ></audio>
+
+    <!-- 歌词容器 -->
+    <div class="lyrics-container">
+        <div id="lyrics" class="lyrics">点一下播放，听听我们的歌～</div>
+    </div>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+        <div class="player-controls">
+            <div class="play-button" id="play-btn">
+                <i class="fa fa-play" id="play-icon"></i>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="time-display">
+                    <span id="current-time">00:00</span>
+                    <span id="duration">00:00</span>
+                </div>
+            </div>
+            <div class="volume-control">
+                <div class="volume-icon">
+                    <i class="fa fa-volume-up" id="volume-icon"></i>
+                </div>
+                <div class="volume-slider" id="volume-slider">
+                    <div class="volume-level" id="volume-level"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 导航栏 -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 bg-blur shadow-sm">
@@ -112,73 +418,60 @@
             <div class="hidden md:flex space-x-8">
                 <a href="#hero" class="nav-link hover:text-love transition-colors">首页</a>
                 <a href="#about" class="nav-link hover:text-love transition-colors">关于我们</a>
-                <a href="#memories" class="nav-link hover:text-love transition-colors">美好回忆</a>
-                <a href="#love-days" class="nav-link hover:text-love transition-colors">恋爱计时</a>
+                <a href="#memories" class="nav-link hover:text-love transition-colors">快乐回忆</a>
+                <a href="#love-days" class="nav-link hover:text-love transition-colors">在一起多久啦</a>
+                <a href="#countdown" class="nav-link hover:text-love transition-colors">纪念日倒计时</a>
             </div>
             <button id="menu-toggle" class="md:hidden text-gray-700 focus:outline-none">
                 <i class="fa fa-bars text-xl"></i>
             </button>
         </div>
-        <!-- 移动端菜单 -->
         <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute w-full">
             <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
                 <a href="#hero" class="mobile-nav-link hover:text-love transition-colors py-2">首页</a>
                 <a href="#about" class="mobile-nav-link hover:text-love transition-colors py-2">关于我们</a>
-                <a href="#memories" class="mobile-nav-link hover:text-love transition-colors py-2">美好回忆</a>
-                <a href="#love-days" class="mobile-nav-link hover:text-love transition-colors py-2">恋爱计时</a>
+                <a href="#memories" class="mobile-nav-link hover:text-love transition-colors py-2">快乐回忆</a>
+                <a href="#love-days" class="mobile-nav-link hover:text-love transition-colors py-2">在一起多久啦</a>
+                <a href="#countdown" class="mobile-nav-link hover:text-love transition-colors py-2">纪念日倒计时</a>
             </div>
         </div>
     </nav>
 
-    <!-- 首页/封面 - 全新设计 -->
+    <!-- 英雄区 -->
     <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16">
-        <!-- 动态背景 - 使用本地图片 + 轻微缩放平移效果 -->
         <div class="absolute inset-0 z-0 wave-bg"></div>
-        
-        <!-- 增加一层暗色叠加，让文字更清晰 -->
         <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
-        
-        <!-- 装饰性浮动元素 -->
         <div class="absolute top-1/4 left-1/5 w-12 h-12 bg-white/20 rounded-full blur-xl animate-float-slow z-20"></div>
         <div class="absolute bottom-1/3 right-1/4 w-20 h-20 bg-white/10 rounded-full blur-2xl animate-float z-20"></div>
-
         <div class="container mx-auto px-4 z-30 text-center">
             <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4 my-8">
-                <!-- XFX 头像 -->
                 <div class="relative group">
                     <div class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-white/80 overflow-hidden shadow-2xl transform transition-all duration-500 group-hover:scale-105">
-                        <img src="images/2.jpg" alt="XFX" class="w-full h-full object-cover">
+                        <img src="2.jpg" alt="XFX" class="w-full h-full object-cover"> <!-- 图片路径（同文件夹） -->
                     </div>
                     <div class="absolute -bottom-2 -right-2 bg-love text-white text-lg font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-lg">X</div>
                 </div>
-
-                <!-- 连接元素 -->
                 <div class="flex flex-col items-center">
                     <i class="fa fa-heart text-5xl text-white animate-pulse my-2"></i>
                     <div class="w-1 h-16 bg-white/50 rounded-full"></div>
                 </div>
-
-                <!-- CM 头像 -->
                 <div class="relative group">
                     <div class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-white/80 overflow-hidden shadow-2xl transform transition-all duration-500 group-hover:scale-105">
-                        <img src="images/1.jpg" alt="CM" class="w-full h-full object-cover">
+                        <img src="1.jpg" alt="CM" class="w-full h-full object-cover"> <!-- 图片路径（同文件夹） -->
                     </div>
                     <div class="absolute -bottom-2 -right-2 bg-romantic text-white text-lg font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-lg">C</div>
                 </div>
             </div>
-
             <h1 class="text-[clamp(2.5rem,8vw,4rem)] font-bold text-white leading-tight text-shadow-lg mb-4">
                 XFX <span class="text-pink-200">❤️</span> CM
             </h1>
             <p class="text-[clamp(1rem,3vw,1.25rem)] text-white/90 text-shadow max-w-xl mx-auto mb-12">
-                始于2025.10.25，我们的爱情故事正在继续...
+                从2025.10.25开始，和CM的恋爱副本开启啦～
             </p>
             <a href="#about" class="inline-block bg-white text-love hover:bg-love hover:text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
-                开始阅读 <i class="fa fa-arrow-down ml-2"></i>
+                看看我们的故事 <i class="fa fa-arrow-down ml-2"></i>
             </a>
         </div>
-
-        <!-- 波浪形底部分割线 -->
         <div class="absolute bottom-0 left-0 w-full overflow-hidden z-20">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="w-full h-auto">
                 <path fill="#fff" fill-opacity="1" d="M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,128C672,117,768,139,864,170.7C960,203,1056,245,1152,234.7C1248,224,1344,160,1392,128L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
@@ -190,110 +483,110 @@
     <section id="about" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16 fade-in-section">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">关于我们</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">关于我们俩</h2>
                 <div class="w-20 h-1 bg-love mx-auto"></div>
             </div>
-            
             <div class="flex flex-col md:flex-row gap-12 items-center">
                 <div class="md:w-1/2 fade-in-left">
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">我们的故事</h3>
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">我们的小故事</h3>
                     <p class="text-gray-600 mb-6 leading-relaxed">
-                        2025年10月25日，是我们爱情故事的起点。还记得第一次见面时的心动，那些聊不完的话题，以及越来越清晰的默契。从陌生到熟悉，从朋友到恋人，每一步都充满了甜蜜与期待。
+                        2025年10月25日，就是我们正式在一起的日子～ 还记得第一次见面的时候，两个人都有点小紧张。
                     </p>
                     <p class="text-gray-600 mb-6 leading-relaxed">
-                        我们一起经历了许多第一次：第一次牵手、第一次旅行、第一次为彼此做饭... 每一个瞬间都成为了我们爱情里最珍贵的印记。未来的路还很长，我们会继续携手同行，创造更多美好的回忆。
+                        在一起之后，解锁了好多第一次：第一次牵手、第一次亲亲，第一次抱抱，每一个小瞬间都超甜！未来还有好多好多事想一起做。
                     </p>
                     <div class="flex flex-wrap gap-4">
                         <div class="bg-pink-100 text-love p-4 rounded-lg flex-1 min-w-[150px] text-center">
-                            <p class="text-sm opacity-80">相识日期</p>
+                            <p class="text-sm opacity-80">在一起的日子</p>
                             <p class="font-bold text-lg">2025.10.25</p>
                         </div>
                         <div class="bg-purple-100 text-romantic p-4 rounded-lg flex-1 min-w-[150px] text-center">
-                            <p class="text-sm opacity-80">恋爱状态</p>
-                            <p class="font-bold text-lg">热恋中</p>
+                            <p class="text-sm opacity-80">当前状态</p>
+                            <p class="font-bold text-lg">超甜热恋中</p>
                         </div>
                     </div>
                 </div>
                 <div class="md:w-1/2 grid grid-cols-2 gap-4">
                     <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300 tilt-in">
-                        <img src="images/mem1.jpg" alt="回忆1" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                        <img src="3.jpg" alt="回忆1" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"> <!-- 图片路径（同文件夹） -->
                     </div>
                     <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300 mt-8 tilt-in" style="transition-delay: 100ms;">
-                        <img src="images/mem2.jpg" alt="回忆2" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                        <img src="4.jpg" alt="回忆2" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"> <!-- 图片路径（同文件夹） -->
                     </div>
                     <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform -rotate-2 hover:rotate-0 transition-transform duration-300 tilt-in" style="transition-delay: 200ms;">
-                        <img src="images/mem3.jpg" alt="回忆3" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                        <img src="5.jpg" alt="回忆3" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"> <!-- 图片路径（同文件夹） -->
                     </div>
                     <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-300 mt-8 tilt-in" style="transition-delay: 300ms;">
-                        <img src="images/mem4.jpg" alt="回忆4" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                        <img src="6.jpg" alt="回忆4" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"> <!-- 图片路径（同文件夹） -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 我们的回忆 (照片墙) -->
+    <!-- 快乐回忆 -->
     <section id="memories" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16 fade-in-section">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">我们的回忆</h2>
-                <p class="text-gray-500 max-w-2xl mx-auto">每一张照片，都是时光的标本，记录着我们共同走过的点点滴滴。</p>
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">快乐回忆合集</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">每一张照片都是快乐证据，记录和CM在一起的点点滴滴～</p>
                 <div class="w-20 h-1 bg-romantic mx-auto mt-4"></div>
             </div>
-            
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 照片项 1 -->
-                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section">
-                    <img src="images/mem1.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="memory-card fade-in-section">
+                    <div class="memory-front"><img src="7.jpg" alt="回忆" class="w-full h-full object-cover"></div> <!-- 图片路径（同文件夹） -->
+                    <div class="memory-back">
+                        <p class="text-lg font-semibold mb-2">甜蜜瞬间</p>
+                        <p class="opacity-80 text-sm">和CM在一起的美好时光</p>
+                    </div>
                 </div>
-                
-                <!-- 照片项 2 -->
-                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section" style="transition-delay: 100ms;">
-                    <img src="images/mem2.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="memory-card fade-in-section" style="transition-delay: 100ms;">
+                    <div class="memory-front"><img src="8.jpg" alt="回忆" class="w-full h-full object-cover"></div> <!-- 图片路径（同文件夹） -->
+                    <div class="memory-back">
+                        <p class="text-lg font-semibold mb-2">快乐日常</p>
+                        <p class="opacity-80 text-sm">一起玩耍的日子</p>
+                    </div>
                 </div>
-                
-                <!-- 照片项 3 -->
-                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section" style="transition-delay: 200ms;">
-                    <img src="images/mem3.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="memory-card fade-in-section" style="transition-delay: 200ms;">
+                    <div class="memory-front"><img src="9.jpg" alt="回忆" class="w-full h-full object-cover"></div> <!-- 图片路径（同文件夹） -->
+                    <div class="memory-back">
+                        <p class="text-lg font-semibold mb-2">温馨时刻</p>
+                        <p class="opacity-80 text-sm">互相陪伴的温暖</p>
+                    </div>
                 </div>
-                
-                <!-- 照片项 4 -->
-                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section" style="transition-delay: 300ms;">
-                    <img src="images/mem4.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="memory-card fade-in-section" style="transition-delay: 300ms;">
+                    <div class="memory-front"><img src="10.jpg" alt="回忆" class="w-full h-full object-cover"></div> <!-- 图片路径（同文件夹） -->
+                    <div class="memory-back">
+                        <p class="text-lg font-semibold mb-2">未来可期</p>
+                        <p class="opacity-80 text-sm">还有更多故事要写</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 恋爱计时 (带烟花特效) -->
+    <!-- 在一起多久啦 -->
     <section id="love-days" class="py-20 bg-white relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('images/background-pattern.png')] bg-repeat opacity-5"></div>
+        <div class="absolute inset-0 bg-[url('background-pattern.png')] bg-repeat opacity-5"></div>
         <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-16 fade-in-section">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">我们在一起的时光</h2>
-                <p class="text-gray-500 max-w-2xl mx-auto">每一个日子都值得纪念，每一秒都充满爱意。</p>
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">和CM在一起多久啦</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">每一分每一秒，都值得好好纪念～</p>
                 <div class="w-20 h-1 bg-love mx-auto mt-4"></div>
             </div>
-            
             <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-12 relative overflow-hidden fade-in-section">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-love/10 rounded-bl-full"></div>
                 <div class="absolute bottom-0 left-0 w-32 h-32 bg-romantic/10 rounded-tr-full"></div>
-                
                 <div class="text-center mb-8">
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">恋爱天数计时器</h3>
-                    <p class="text-gray-500">从 2025年10月25日 开始</p>
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">恋爱计时器</h3>
+                    <p class="text-gray-500">从 2025年10月25日 开始计算</p>
                 </div>
-                
                 <div class="flex flex-col md:flex-row justify-center items-center gap-6 mb-8">
                     <div class="days-counter bg-gradient-to-r from-love to-romantic text-white rounded-xl p-8 shadow-lg transform hover:scale-105 transition-transform duration-300">
-                        <p class="text-sm opacity-80 mb-2">在一起天数</p>
+                        <p class="text-sm opacity-80 mb-2">已经在一起</p>
                         <p id="days-together" class="text-5xl font-bold animate-pulse">0</p>
+                        <p class="text-sm opacity-80 mt-2">天啦！</p>
                     </div>
-                    
                     <div class="time-counter grid grid-cols-3 gap-4 text-center">
                         <div class="bg-gray-100 rounded-lg p-4">
                             <p id="hours" class="text-2xl font-bold">00</p>
@@ -309,12 +602,40 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="text-center">
                     <button id="surprise-btn" class="bg-love hover:bg-love-dark text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
-                        <i class="fa fa-heart mr-2"></i> 点击有惊喜
+                        <i class="fa fa-heart mr-2"></i> 点我放烟花～
                     </button>
-                    <p class="text-sm text-gray-500 mt-4">看看我们的爱情烟花</p>
+                    <p class="text-sm text-gray-500 mt-4">给CM一个小惊喜✨</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 纪念日倒计时 -->
+    <section id="countdown" class="countdown-section fade-in-section">
+        <div class="container mx-auto px-4">
+            <h2 class="countdown-title">接下来的重要日子</h2>
+            <div class="countdown-container">
+                <div class="countdown-card" id="countdown-1month">
+                    <div class="countdown-label">距离1个月还有</div>
+                    <div class="countdown-value" id="1month-value">00</div>
+                    <div class="countdown-time" id="1month-time">天 时 分 秒</div>
+                </div>
+                <div class="countdown-card" id="countdown-2month">
+                    <div class="countdown-label">距离2个月还有</div>
+                    <div class="countdown-value" id="2month-value">00</div>
+                    <div class="countdown-time" id="2month-time">天 时 分 秒</div>
+                </div>
+                <div class="countdown-card" id="countdown-3month">
+                    <div class="countdown-label">距离3个月还有</div>
+                    <div class="countdown-value" id="3month-value">00</div>
+                    <div class="countdown-time" id="3month-time">天 时 分 秒</div>
+                </div>
+                <div class="countdown-card" id="countdown-1year">
+                    <div class="countdown-label">距离1年还有</div>
+                    <div class="countdown-value" id="1year-value">00</div>
+                    <div class="countdown-time" id="1year-time">天 时 分 秒</div>
                 </div>
             </div>
         </div>
@@ -322,32 +643,29 @@
 
     <!-- 页脚 -->
     <footer class="bg-gray-800 text-white py-10 relative overflow-hidden">
-        <!-- 底部发光粒子效果 (简化版) -->
         <div id="footer-particles" class="absolute inset-0 opacity-30"></div>
-        
         <div class="container mx-auto px-4 relative z-10">
             <div class="text-center">
-                <h3 class="text-2xl font-bold mb-4">XFX & CM</h3>
-                <p class="text-gray-400">© 2025 我们的爱情故事. 永远在一起.</p>
+                <h3 class="text-2xl font-bold mb-4">XFX & CM 的恋爱小天地</h3>
+                <p class="text-gray-400 mb-6">© 2025 要一直甜甜蜜蜜呀～ 永远在一起！</p>
+                <a href="https://www.instagram.com/f_nxiang2009.it?igsh=MXdtenliaTg0b3VqZA%3D%3D&utm_source=qr" target="_blank" class="inline-flex items-center text-pink-300 hover:text-white transition-colors">
+                    <i class="fa fa-instagram mr-2"></i> 关注我的Instagram
+                </a>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- JavaScript 代码 -->
     <script>
-        // 导航栏滚动效果增强
+        // 导航栏滚动效果
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
                 navbar.classList.add('py-2', 'shadow-md');
                 navbar.classList.remove('py-3', 'shadow-sm');
-                navbar.querySelector('a').classList.add('text-xl');
-                navbar.querySelector('a').classList.remove('text-2xl');
             } else {
                 navbar.classList.add('py-3', 'shadow-sm');
                 navbar.classList.remove('py-2', 'shadow-md');
-                navbar.querySelector('a').classList.add('text-2xl');
-                navbar.querySelector('a').classList.remove('text-xl');
             }
         });
 
@@ -368,93 +686,393 @@
                         top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
                     });
+                    // 关闭移动端菜单
                     document.getElementById('mobile-menu').classList.add('hidden');
                 }
             });
         });
 
-        // 恋爱天数计算
-        function calculateLoveDays() {
-            const loveDate = new Date('2025-10-25');
-            const today = new Date();
-            const diffTime = Math.abs(today - loveDate);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-            const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
-            
-            document.getElementById('days-together').textContent = diffDays;
-            document.getElementById('hours').textContent = diffHours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = diffMinutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = diffSeconds.toString().padStart(2, '0');
-            
-            if (diffDays % 30 === 0 || diffDays === 100 || diffDays === 365) {
-                setTimeout(() => { showFireworks(); }, 1000);
-            }
-        }
-
-        // 烟花特效
-        function showFireworks() {
-            const fireworksContainer = document.getElementById('fireworks');
-            fireworksContainer.style.display = 'block';
-            for (let i = 0; i < 15; i++) {
-                const firework = document.createElement('div');
-                firework.classList.add('firework');
-                const colors = ['#ff3e6c', '#8a2be2', '#ff7a9c', '#b066fe', '#ffffff'];
-                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight * 0.7; // 主要在上方
-                firework.style.left = `${x}px`;
-                firework.style.top = `${y}px`;
-                fireworksContainer.appendChild(firework);
-                setTimeout(() => { firework.remove(); }, 1000);
-            }
-            setTimeout(() => { fireworksContainer.style.display = 'none'; }, 5000);
-        }
-        
-        // 滚动动画
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-        const observer = new IntersectionObserver((entries, observer) => {
+        // 渐入动画
+        const fadeElements = document.querySelectorAll('.fade-in-section, .fade-in-left, .tilt-in');
+        const observerOptions = {
+            threshold: 0.1
+        };
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
-        document.querySelectorAll('.fade-in-section, .fade-in-left, .tilt-in').forEach(el => {
-            observer.observe(el);
+        fadeElements.forEach(el => observer.observe(el));
+
+        // 恋爱计时器
+        function updateLoveDays() {
+            const startDate = new Date('2025-10-25');
+            const now = new Date();
+            const diffTime = now - startDate;
+            
+            // 计算天数
+            const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('days-together').textContent = days;
+            
+            // 计算剩余时间（小时、分钟、秒）
+            const remainingTime = diffTime % (1000 * 60 * 60 * 24);
+            const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            
+            // 补零
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        // 初始化并每秒更新
+        updateLoveDays();
+        setInterval(updateLoveDays, 1000);
+
+        // 纪念日倒计时
+        function updateCountdowns() {
+            const startDate = new Date('2025-10-25');
+            const now = new Date();
+            
+            // 计算各个纪念日
+            const month1 = new Date(startDate);
+            month1.setMonth(startDate.getMonth() + 1);
+            
+            const month2 = new Date(startDate);
+            month2.setMonth(startDate.getMonth() + 2);
+            
+            const month3 = new Date(startDate);
+            month3.setMonth(startDate.getMonth() + 3);
+            
+            const year1 = new Date(startDate);
+            year1.setFullYear(startDate.getFullYear() + 1);
+            
+            // 更新倒计时
+            updateSingleCountdown(month1, '1month');
+            updateSingleCountdown(month2, '2month');
+            updateSingleCountdown(month3, '3month');
+            updateSingleCountdown(year1, '1year');
+        }
+
+        function updateSingleCountdown(targetDate, id) {
+            const now = new Date();
+            const diffTime = targetDate - now;
+            
+            // 如果已经过去，显示0
+            if (diffTime <= 0) {
+                document.getElementById(`${id}-value`).textContent = '00';
+                document.getElementById(`${id}-time`).textContent = '00:00:00';
+                document.getElementById(`countdown-${id}`).classList.add('past');
+                return;
+            }
+            
+            // 计算天、时、分、秒
+            const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const remainingTime = diffTime % (1000 * 60 * 60 * 24);
+            const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            
+            // 更新显示
+            document.getElementById(`${id}-value`).textContent = days.toString().padStart(2, '0');
+            document.getElementById(`${id}-time`).textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        // 初始化并每秒更新
+        updateCountdowns();
+        setInterval(updateCountdowns, 1000);
+
+        // 烟花效果
+        document.getElementById('surprise-btn').addEventListener('click', function() {
+            const fireworks = document.getElementById('fireworks');
+            fireworks.style.display = 'block';
+            
+            // 播放烟花音效
+            const fireworkSound = document.getElementById('firework-sound');
+            fireworkSound.currentTime = 0;
+            fireworkSound.play().catch(e => console.log('音效播放失败:', e));
+            
+            // 创建多个烟花
+            for (let i = 0; i < 10; i++) {
+                createFirework();
+            }
+            
+            // 3秒后隐藏烟花容器
+            setTimeout(() => {
+                fireworks.style.display = 'none';
+                // 清除所有烟花元素
+                while (fireworks.firstChild) {
+                    fireworks.removeChild(fireworks.firstChild);
+                }
+            }, 3000);
         });
 
-        // 页脚粒子效果 (简化版)
-        function createFooterParticles() {
-            const container = document.getElementById('footer-particles');
-            if (!container) return;
-            for (let i = 0; i < 20; i++) {
+        function createFirework() {
+            const fireworks = document.getElementById('fireworks');
+            const firework = document.createElement('div');
+            firework.classList.add('firework');
+            
+            // 随机颜色
+            const colors = ['#ff3e6c', '#8a2be2', '#ff7a9c', '#b066fe', '#ffffff'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.backgroundColor = randomColor;
+            
+            // 随机位置（屏幕范围内）
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.7; // 主要在屏幕上半部分
+            firework.style.left = `${x}px`;
+            firework.style.top = `${y}px`;
+            
+            // 添加到容器
+            fireworks.appendChild(firework);
+            
+            // 随机大小的爆炸
+            const particleCount = Math.floor(Math.random() * 30) + 20;
+            for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
-                particle.style.position = 'absolute';
-                particle.style.width = Math.random() * 4 + 'px';
-                particle.style.height = Math.random() * 4 + 'px';
-                particle.style.backgroundColor = 'white';
-                particle.style.borderRadius = '50%';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animation = `float ${Math.random() * 10 + 10}s linear infinite`;
-                container.appendChild(particle);
+                particle.classList.add('firework');
+                particle.style.backgroundColor = randomColor;
+                
+                // 随机方向和距离
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 100 + 50;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                // 设置粒子样式
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.animation = `explode 1.5s ease-out forwards`;
+                
+                // 添加到容器
+                fireworks.appendChild(particle);
             }
         }
 
-        // 惊喜按钮点击事件
-        document.getElementById('surprise-btn').addEventListener('click', function() {
-            showFireworks();
-            this.classList.add('animate-pulse');
-            setTimeout(() => { this.classList.remove('animate-pulse'); }, 1000);
+        // 音乐播放器 + 完整LRC歌词同步
+        const audio = document.getElementById('background-music');
+        const playBtn = document.getElementById('play-btn');
+        const playIcon = document.getElementById('play-icon');
+        const progressBar = document.getElementById('progress-bar');
+        const progress = document.getElementById('progress');
+        const currentTime = document.getElementById('current-time');
+        const duration = document.getElementById('duration');
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeLevel = document.getElementById('volume-level');
+        const volumeIcon = document.getElementById('volume-icon');
+        const lyrics = document.getElementById('lyrics');
+
+        // 播放/暂停切换
+        playBtn.addEventListener('click', function() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playIcon.classList.remove('fa-play');
+                    playIcon.classList.add('fa-pause');
+                }).catch(e => {
+                    console.log('音乐播放失败:', e);
+                    lyrics.textContent = '音乐播放失败，请检查浏览器设置';
+                });
+            } else {
+                audio.pause();
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+            }
         });
 
-        // 初始化
-        calculateLoveDays();
-        setInterval(calculateLoveDays, 1000);
-        createFooterParticles(); // 初始化页脚粒子
+        // 更新进度条
+        audio.addEventListener('timeupdate', function() {
+            const current = audio.currentTime;
+            const total = audio.duration;
+            const percent = (current / total) * 100;
+            progress.style.width = `${percent}%`;
+            
+            // 更新时间显示
+            currentTime.textContent = formatTime(current);
+            if (!duration.textContent || duration.textContent === '00:00') {
+                duration.textContent = formatTime(total);
+            }
+
+            // 歌词同步
+            updateLyrics(current);
+        });
+
+        // 点击进度条跳转
+        progressBar.addEventListener('click', function(e) {
+            const rect = progressBar.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = clickX / rect.width;
+            audio.currentTime = percent * audio.duration;
+        });
+
+        // 音量控制
+        volumeSlider.addEventListener('click', function(e) {
+            const rect = volumeSlider.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = clickX / rect.width;
+            audio.volume = percent;
+            volumeLevel.style.width = `${percent * 100}%`;
+            
+            // 更新音量图标
+            if (percent === 0) {
+                volumeIcon.classList.remove('fa-volume-up', 'fa-volume-down');
+                volumeIcon.classList.add('fa-volume-off');
+            } else if (percent < 0.5) {
+                volumeIcon.classList.remove('fa-volume-up', 'fa-volume-off');
+                volumeIcon.classList.add('fa-volume-down');
+            } else {
+                volumeIcon.classList.remove('fa-volume-down', 'fa-volume-off');
+                volumeIcon.classList.add('fa-volume-up');
+            }
+        });
+
+        // 时间格式化（分:秒）
+        function formatTime(time) {
+            if (isNaN(time)) return '00:00';
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // 完整LRC歌词解析与同步
+        let lyricList = []; // 存储解析后的歌词数组
+        let currentLyricIndex = -1; // 当前显示的歌词索引
+
+        // 加载并解析LRC歌词
+        function loadLrcLyrics() {
+            const lrcText = `[00:00.0]把回忆拼好给你-cici_
+[00:00.12]词：Douji-T 
+[00:00.24]曲：Douji-T/Shingo.S 
+[00:00.36]中文词：Yvette 
+[00:00.48]推广：星斗推
+[00:00.6]OP：TV Tokyo Music Co. Ltd. 
+[00:00.72]SP：Universal Music Publishing CHINA 
+[00:00.84]「本作品经过原版权公司正式授权」
+[00:00.96]独自收集两个人之间的回忆
+[00:04.53]即使每当到这时候我都会哭泣
+[00:08.01]为何一切
+[00:09.72]变得如此
+[00:11.4]无法回到过去
+[00:21.27]我们都是渺小真实存在
+[00:24.39]祈愿小世界里不只有挫败
+[00:27.63]直到遇见你我以为就光明起来
+[00:30.84]眼睛里看到的都是广袤无垠的大海
+[00:34.41]有你在的日子不可能被取代
+[00:37.65]在最灰暗的日子你陪着我发呆
+[00:40.86]你让我学会如何拨开阴霾
+[00:43.62]将快乐全都收集将不开心全都淘汰
+[00:46.65]你对我说的情话
+[00:49.38]像转瞬即逝的烟花
+[00:52.59]只停在绽放一刹那
+[00:55.77]我却已无法自拔
+[00:58.98]我们的爱总有时差
+[01:02.19]也为你骗自己放下
+[01:05.34]爱炙热的你却忘了爱自己
+[01:12.84]和你在一起画面一帧帧唤醒脑海
+[01:16.05]你总说我是小孩对我总是想溺爱
+[01:19.26]我像做了一场梦梦见我们的未来
+[01:22.47]我们俩嬉嬉闹闹直到梦突然醒来
+[01:25.65]想和你说声谢谢至少笑着离开
+[01:28.68]不想闹的不愉快互相不理不睬
+[01:32.04]我想说爱这件事总要履行告白
+[01:35.28]最后就用朋友身份说拜拜
+[01:51.240005]有你在的日子不可能被取代
+[01:54.45]在最灰暗的日子你陪着我发呆
+[01:57.69]你让我学会如何拨开阴霾
+[02:00.45]将快乐全都收集将不开心全都淘汰
+[02:03.45]你对我说的情话
+[02:06.15]像转瞬即逝的烟花
+[02:09.41]只停在绽放一刹那
+[02:12.6]我却已无法自拔
+[02:15.84]我们的爱总有时差
+[02:19.02]也为你骗自己放下
+[02:22.23]爱炙热的你却忘了爱自己
+[02:29.07]独自收集两个人之间的回忆
+[02:32.25]即使每当到这时候我都会哭泣
+[02:35.43]为何一切
+[02:37.05]变得如此
+[02:38.61]无法回到过去
+[02:41.82]但我仍愿意感谢你给过我爱情
+[02:45.06]每一场风景都是我们爱的证明
+[02:48.24]就算如今天各一方
+[02:51.42]祝你余生动听啊
+[02:54.24]你对我说的情话
+[02:57.36]像转瞬即逝的烟花
+[03:00.6]只停在绽放一刹那
+[03:03.81]我早已无法自拔
+[03:07.02]我们的爱总有时差
+[03:10.2]也为你骗自己放下
+[03:13.41]爱炙热的你却忘了爱自己`;
+
+            // 解析LRC歌词
+            const lrcLines = lrcText.split('\n');
+            const lrcReg = /\[(\d{2}):(\d{2}\.\d{1,3})\](.*)/; // 匹配 [分:秒.毫秒]歌词
+
+            lyricList = [];
+            lrcLines.forEach(line => {
+                const match = line.match(lrcReg);
+                if (match) {
+                    const minute = parseInt(match[1]);
+                    const second = parseFloat(match[2]);
+                    const time = minute * 60 + second; // 转换为总秒数
+                    const text = match[3].trim();
+                    if (text) {
+                        lyricList.push({ time, text });
+                    }
+                }
+            });
+
+            // 按时间排序（确保歌词顺序正确）
+            lyricList.sort((a, b) => a.time - b.time);
+        }
+
+        // 根据当前播放时间更新歌词
+        function updateLyrics(currentTime) {
+            if (lyricList.length === 0) return;
+
+            // 找到当前时间对应的歌词索引
+            let targetIndex = -1;
+            for (let i = 0; i < lyricList.length; i++) {
+                if (lyricList[i].time <= currentTime) {
+                    targetIndex = i;
+                } else {
+                    break; // 后面的歌词时间更大，无需继续遍历
+                }
+            }
+
+            // 如果索引变化，更新歌词并添加淡入效果
+            if (targetIndex !== currentLyricIndex) {
+                lyrics.classList.add('lyrics-fade');
+                setTimeout(() => {
+                    lyrics.textContent = lyricList[targetIndex].text;
+                    lyrics.classList.remove('lyrics-fade');
+                }, 300);
+                currentLyricIndex = targetIndex;
+            }
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', function() {
+            // 预加载背景图
+            const bgImage = new Image();
+            bgImage.src = 'Back.jpg'; // 预加载背景图
+            
+            // 加载LRC歌词
+            loadLrcLyrics();
+            
+            // 初始化歌词显示
+            if (lyricList.length > 0) {
+                lyrics.textContent = '点一下播放，听听我们的歌～';
+            }
+        });
+
+        // 音频播放结束时重置歌词
+        audio.addEventListener('ended', function() {
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            currentLyricIndex = -1;
+            lyrics.textContent = '播放完成，点击重新播放～';
+        });
     </script>
 </body>
 </html>
