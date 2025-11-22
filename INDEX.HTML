@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XFX & CM 的爱情故事</title>
+    <!-- 引入外部资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 自定义配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        love: {
+                            DEFAULT: '#ff3e6c',
+                            light: '#ff7a9c',
+                            dark: '#c01e4a'
+                        },
+                        romantic: {
+                            DEFAULT: '#8a2be2',
+                            light: '#b066fe',
+                            dark: '#6313b4'
+                        }
+                    },
+                    fontFamily: {
+                        romantic: ['Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+            .text-shadow-lg { text-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+            .bg-blur { backdrop-filter: blur(8px); }
+            .scrollbar-hide::-webkit-scrollbar { display: none; }
+            .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+            .animate-float { animation: float 6s ease-in-out infinite; }
+            .animate-float-slow { animation: float 8s ease-in-out infinite; }
+            .animate-wave-horizontal { animation: waveHorizontal 30s linear infinite; } /* 改为水平动画 */
+            .content-auto { content-visibility: auto; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        /* 定义水平波浪动画 */
+        @keyframes waveHorizontal {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 2000px; } /* 增加滚动距离 */
+        }
+    </style>
+    
+    <!-- 烟花特效样式 -->
+    <style>
+        #fireworks {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; display: none;
+        }
+        .firework {
+            position: absolute; width: 10px; height: 10px; border-radius: 50%; animation: explode 1s ease-out forwards;
+        }
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(20); opacity: 0; }
+        }
+
+        /* 星空背景 - 使用本地图片 */
+        .wave-bg {
+            /* 使用本地背景图片 */
+            background-image: url('Back.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* 添加轻微的动态效果 */
+            transform: scale(1.05);
+            animation: slowZoom 30s ease-in-out infinite alternate;
+        }
+        
+        /* 缓慢缩放动画，增加背景的动态感 */
+        @keyframes slowZoom {
+            0% { transform: scale(1.05) translateX(0); }
+            100% { transform: scale(1.1) translateX(-1%); }
+        }
+        
+        /* 滚动动画 */
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+        .fade-in-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-in-left.is-visible { opacity: 1; transform: translateX(0); }
+        .tilt-in { opacity: 0; transform: translateY(30px) rotate(5deg); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .tilt-in.is-visible { opacity: 1; transform: translateY(0) rotate(0); }
+    </style>
+</head>
+<body class="font-romantic text-gray-800 overflow-x-hidden bg-pink-50">
+
+    <!-- 烟花特效容器 -->
+    <div id="fireworks"></div>
+
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 bg-blur shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-love transition-all duration-300">
+                <i class="fa fa-heart-o mr-2"></i>XFX & CM
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#hero" class="nav-link hover:text-love transition-colors">首页</a>
+                <a href="#about" class="nav-link hover:text-love transition-colors">关于我们</a>
+                <a href="#memories" class="nav-link hover:text-love transition-colors">美好回忆</a>
+                <a href="#love-days" class="nav-link hover:text-love transition-colors">恋爱计时</a>
+            </div>
+            <button id="menu-toggle" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute w-full">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+                <a href="#hero" class="mobile-nav-link hover:text-love transition-colors py-2">首页</a>
+                <a href="#about" class="mobile-nav-link hover:text-love transition-colors py-2">关于我们</a>
+                <a href="#memories" class="mobile-nav-link hover:text-love transition-colors py-2">美好回忆</a>
+                <a href="#love-days" class="mobile-nav-link hover:text-love transition-colors py-2">恋爱计时</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页/封面 - 全新设计 -->
+    <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16">
+        <!-- 动态背景 - 使用本地图片 + 轻微缩放平移效果 -->
+        <div class="absolute inset-0 z-0 wave-bg"></div>
+        
+        <!-- 增加一层暗色叠加，让文字更清晰 -->
+        <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+        
+        <!-- 装饰性浮动元素 -->
+        <div class="absolute top-1/4 left-1/5 w-12 h-12 bg-white/20 rounded-full blur-xl animate-float-slow z-20"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-20 h-20 bg-white/10 rounded-full blur-2xl animate-float z-20"></div>
+
+        <div class="container mx-auto px-4 z-30 text-center">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4 my-8">
+                <!-- XFX 头像 -->
+                <div class="relative group">
+                    <div class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-white/80 overflow-hidden shadow-2xl transform transition-all duration-500 group-hover:scale-105">
+                        <img src="images/2.jpg" alt="XFX" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 bg-love text-white text-lg font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-lg">X</div>
+                </div>
+
+                <!-- 连接元素 -->
+                <div class="flex flex-col items-center">
+                    <i class="fa fa-heart text-5xl text-white animate-pulse my-2"></i>
+                    <div class="w-1 h-16 bg-white/50 rounded-full"></div>
+                </div>
+
+                <!-- CM 头像 -->
+                <div class="relative group">
+                    <div class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-white/80 overflow-hidden shadow-2xl transform transition-all duration-500 group-hover:scale-105">
+                        <img src="images/1.jpg" alt="CM" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 bg-romantic text-white text-lg font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-lg">C</div>
+                </div>
+            </div>
+
+            <h1 class="text-[clamp(2.5rem,8vw,4rem)] font-bold text-white leading-tight text-shadow-lg mb-4">
+                XFX <span class="text-pink-200">❤️</span> CM
+            </h1>
+            <p class="text-[clamp(1rem,3vw,1.25rem)] text-white/90 text-shadow max-w-xl mx-auto mb-12">
+                始于2025.10.25，我们的爱情故事正在继续...
+            </p>
+            <a href="#about" class="inline-block bg-white text-love hover:bg-love hover:text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                开始阅读 <i class="fa fa-arrow-down ml-2"></i>
+            </a>
+        </div>
+
+        <!-- 波浪形底部分割线 -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden z-20">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="w-full h-auto">
+                <path fill="#fff" fill-opacity="1" d="M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,128C672,117,768,139,864,170.7C960,203,1056,245,1152,234.7C1248,224,1344,160,1392,128L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 fade-in-section">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">关于我们</h2>
+                <div class="w-20 h-1 bg-love mx-auto"></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="md:w-1/2 fade-in-left">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">我们的故事</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        2025年10月25日，是我们爱情故事的起点。还记得第一次见面时的心动，那些聊不完的话题，以及越来越清晰的默契。从陌生到熟悉，从朋友到恋人，每一步都充满了甜蜜与期待。
+                    </p>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        我们一起经历了许多第一次：第一次牵手、第一次旅行、第一次为彼此做饭... 每一个瞬间都成为了我们爱情里最珍贵的印记。未来的路还很长，我们会继续携手同行，创造更多美好的回忆。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="bg-pink-100 text-love p-4 rounded-lg flex-1 min-w-[150px] text-center">
+                            <p class="text-sm opacity-80">相识日期</p>
+                            <p class="font-bold text-lg">2025.10.25</p>
+                        </div>
+                        <div class="bg-purple-100 text-romantic p-4 rounded-lg flex-1 min-w-[150px] text-center">
+                            <p class="text-sm opacity-80">恋爱状态</p>
+                            <p class="font-bold text-lg">热恋中</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 grid grid-cols-2 gap-4">
+                    <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300 tilt-in">
+                        <img src="images/mem1.jpg" alt="回忆1" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300 mt-8 tilt-in" style="transition-delay: 100ms;">
+                        <img src="images/mem2.jpg" alt="回忆2" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform -rotate-2 hover:rotate-0 transition-transform duration-300 tilt-in" style="transition-delay: 200ms;">
+                        <img src="images/mem3.jpg" alt="回忆3" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-lg shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-300 mt-8 tilt-in" style="transition-delay: 300ms;">
+                        <img src="images/mem4.jpg" alt="回忆4" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 我们的回忆 (照片墙) -->
+    <section id="memories" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 fade-in-section">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">我们的回忆</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">每一张照片，都是时光的标本，记录着我们共同走过的点点滴滴。</p>
+                <div class="w-20 h-1 bg-romantic mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 照片项 1 -->
+                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section">
+                    <img src="images/mem1.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                
+                <!-- 照片项 2 -->
+                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section" style="transition-delay: 100ms;">
+                    <img src="images/mem2.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                
+                <!-- 照片项 3 -->
+                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section" style="transition-delay: 200ms;">
+                    <img src="images/mem3.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                
+                <!-- 照片项 4 -->
+                <div class="memory-item group relative overflow-hidden rounded-xl shadow-lg fade-in-section" style="transition-delay: 300ms;">
+                    <img src="images/mem4.jpg" alt="回忆" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 恋爱计时 (带烟花特效) -->
+    <section id="love-days" class="py-20 bg-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('images/background-pattern.png')] bg-repeat opacity-5"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 fade-in-section">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">我们在一起的时光</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">每一个日子都值得纪念，每一秒都充满爱意。</p>
+                <div class="w-20 h-1 bg-love mx-auto mt-4"></div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-12 relative overflow-hidden fade-in-section">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-love/10 rounded-bl-full"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-romantic/10 rounded-tr-full"></div>
+                
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">恋爱天数计时器</h3>
+                    <p class="text-gray-500">从 2025年10月25日 开始</p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 mb-8">
+                    <div class="days-counter bg-gradient-to-r from-love to-romantic text-white rounded-xl p-8 shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <p class="text-sm opacity-80 mb-2">在一起天数</p>
+                        <p id="days-together" class="text-5xl font-bold animate-pulse">0</p>
+                    </div>
+                    
+                    <div class="time-counter grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-gray-100 rounded-lg p-4">
+                            <p id="hours" class="text-2xl font-bold">00</p>
+                            <p class="text-xs text-gray-500">小时</p>
+                        </div>
+                        <div class="bg-gray-100 rounded-lg p-4">
+                            <p id="minutes" class="text-2xl font-bold">00</p>
+                            <p class="text-xs text-gray-500">分钟</p>
+                        </div>
+                        <div class="bg-gray-100 rounded-lg p-4">
+                            <p id="seconds" class="text-2xl font-bold">00</p>
+                            <p class="text-xs text-gray-500">秒钟</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button id="surprise-btn" class="bg-love hover:bg-love-dark text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+                        <i class="fa fa-heart mr-2"></i> 点击有惊喜
+                    </button>
+                    <p class="text-sm text-gray-500 mt-4">看看我们的爱情烟花</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-10 relative overflow-hidden">
+        <!-- 底部发光粒子效果 (简化版) -->
+        <div id="footer-particles" class="absolute inset-0 opacity-30"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold mb-4">XFX & CM</h3>
+                <p class="text-gray-400">© 2025 我们的爱情故事. 永远在一起.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果增强
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-md');
+                navbar.classList.remove('py-3', 'shadow-sm');
+                navbar.querySelector('a').classList.add('text-xl');
+                navbar.querySelector('a').classList.remove('text-2xl');
+            } else {
+                navbar.classList.add('py-3', 'shadow-sm');
+                navbar.classList.remove('py-2', 'shadow-md');
+                navbar.querySelector('a').classList.add('text-2xl');
+                navbar.querySelector('a').classList.remove('text-xl');
+            }
+        });
+
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+        // 恋爱天数计算
+        function calculateLoveDays() {
+            const loveDate = new Date('2025-10-25');
+            const today = new Date();
+            const diffTime = Math.abs(today - loveDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+            
+            document.getElementById('days-together').textContent = diffDays;
+            document.getElementById('hours').textContent = diffHours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = diffMinutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = diffSeconds.toString().padStart(2, '0');
+            
+            if (diffDays % 30 === 0 || diffDays === 100 || diffDays === 365) {
+                setTimeout(() => { showFireworks(); }, 1000);
+            }
+        }
+
+        // 烟花特效
+        function showFireworks() {
+            const fireworksContainer = document.getElementById('fireworks');
+            fireworksContainer.style.display = 'block';
+            for (let i = 0; i < 15; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework');
+                const colors = ['#ff3e6c', '#8a2be2', '#ff7a9c', '#b066fe', '#ffffff'];
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight * 0.7; // 主要在上方
+                firework.style.left = `${x}px`;
+                firework.style.top = `${y}px`;
+                fireworksContainer.appendChild(firework);
+                setTimeout(() => { firework.remove(); }, 1000);
+            }
+            setTimeout(() => { fireworksContainer.style.display = 'none'; }, 5000);
+        }
+        
+        // 滚动动画
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-in-section, .fade-in-left, .tilt-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 页脚粒子效果 (简化版)
+        function createFooterParticles() {
+            const container = document.getElementById('footer-particles');
+            if (!container) return;
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 4 + 'px';
+                particle.style.height = Math.random() * 4 + 'px';
+                particle.style.backgroundColor = 'white';
+                particle.style.borderRadius = '50%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animation = `float ${Math.random() * 10 + 10}s linear infinite`;
+                container.appendChild(particle);
+            }
+        }
+
+        // 惊喜按钮点击事件
+        document.getElementById('surprise-btn').addEventListener('click', function() {
+            showFireworks();
+            this.classList.add('animate-pulse');
+            setTimeout(() => { this.classList.remove('animate-pulse'); }, 1000);
+        });
+
+        // 初始化
+        calculateLoveDays();
+        setInterval(calculateLoveDays, 1000);
+        createFooterParticles(); // 初始化页脚粒子
+    </script>
+</body>
+</html>
